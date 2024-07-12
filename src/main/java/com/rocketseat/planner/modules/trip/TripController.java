@@ -1,8 +1,6 @@
 package com.rocketseat.planner.modules.trip;
 
-import com.rocketseat.planner.modules.activities.ActivityRequestPayload;
-import com.rocketseat.planner.modules.activities.ActivityResponse;
-import com.rocketseat.planner.modules.activities.ActivityService;
+import com.rocketseat.planner.modules.activities.*;
 import com.rocketseat.planner.modules.participant.*;
 import jakarta.servlet.http.Part;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,6 +126,13 @@ public class TripController {
         }
 
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/{id}/activities")
+    public ResponseEntity<List<ActivityDTO>> getAllActivities(@PathVariable UUID id) {
+        List<ActivityDTO> activityDTOList = this.activityService.getAllActivitiesFromId(id);
+
+        return ResponseEntity.ok(activityDTOList);
     }
 
 }
