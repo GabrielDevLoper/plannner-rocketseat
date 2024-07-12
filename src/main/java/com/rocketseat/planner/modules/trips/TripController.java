@@ -1,15 +1,17 @@
-package com.rocketseat.planner.modules.trip;
+package com.rocketseat.planner.modules.trips;
 
 import com.rocketseat.planner.modules.activities.*;
-import com.rocketseat.planner.modules.participant.*;
-import jakarta.servlet.http.Part;
+import com.rocketseat.planner.modules.links.LinkDTO;
+import com.rocketseat.planner.modules.links.LinkRequestPayload;
+import com.rocketseat.planner.modules.links.LinkResponse;
+import com.rocketseat.planner.modules.links.LinkService;
+import com.rocketseat.planner.modules.participants.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -26,6 +28,9 @@ public class TripController {
 
     @Autowired
     private ActivityService activityService;
+
+    @Autowired
+    private LinkService linkService;
 
     @PostMapping
     public ResponseEntity<TripCreateResponse> createTrip(@RequestBody TripRequestPayload payload) {
@@ -133,6 +138,30 @@ public class TripController {
         List<ActivityDTO> activityDTOList = this.activityService.getAllActivitiesFromId(id);
 
         return ResponseEntity.ok(activityDTOList);
+    }
+
+
+    @PostMapping("/{id}/links")
+    public ResponseEntity<LinkResponse> registerLink(@PathVariable UUID id, @RequestBody LinkRequestPayload payload) {
+        Optional<Trip> trip = this.tripRepository.findById(id);
+
+        if (trip.isPresent()) {
+            Trip rawTrip = trip.get();
+
+            LinkResponse link = this.linkService.createLink(payload, rawTrip);
+
+            return ResponseEntity.ok(link);
+        }
+
+        return ResponseEntity.notFound().build();
+    }
+
+
+    @GetMapping("/{id}/links")
+    public ResponseEntity<List<LinkDTO>> getAllLinks(@PathVariable UUID id) {
+        List<LinkDTO> linkDTOList = this.linkService.getAllLinksFromId(id);
+
+        return ResponseEntity.ok(linkDTOList);
     }
 
 }

@@ -1,12 +1,10 @@
-package com.rocketseat.planner.modules.participant;
+package com.rocketseat.planner.modules.participants;
 
-import com.rocketseat.planner.modules.trip.Trip;
-import com.rocketseat.planner.modules.trip.TripRepository;
+import com.rocketseat.planner.modules.trips.Trip;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
